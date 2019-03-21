@@ -1,7 +1,7 @@
 {
-  "name": "nextjs-cms",
-  "version": "1.0.0",
-  "description": "A dynamic CMS template made with Next.js",
+  "name": "ramblings",
+  "version": "2.0.0",
+  "description": "A blogging website for my wife.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
@@ -13,7 +13,7 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "keywords": [],
-  "author": "",
+  "author": "Derek Garnett",
   "license": "ISC",
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
