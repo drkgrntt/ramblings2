@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import _ from 'lodash'
 import Link from 'next/link'
+import moment from 'moment'
 import Router from 'next/router'
 import renderHTML from 'react-render-html'
 import CommentForm from '../components/CommentForm'
@@ -77,9 +78,9 @@ class PostShow extends Component {
     if (!!currentUser && (currentUser._id === post.author._id || currentUser.isAdmin)) {
       return (
         <div className="post__buttons">
-          <button className="button button-secondary" onClick={() => this.onDeleteClick()}>Delete</button>
+          <button className="button button-tertiary" onClick={() => this.onDeleteClick()}>Delete</button>
           <Link href={`/${path}_edit?id=${post._id}`} as={`/${path}/${post._id}/edit`}>
-            <button className="button button-tertiary">Edit</button>
+            <button className="button button-secondary">Edit</button>
           </Link>
         </div>
       )
@@ -150,8 +151,8 @@ class PostShow extends Component {
     )) {
       return (
         <div className="comment__buttons">
-          <button className="button button-secondary button-small" onClick={() => this.onCommentDeleteClick(post, comment)}>Delete</button>
-          <button className="button button-tertiary button-small" onClick={() => {
+          <button className="button button-tertiary button-small" onClick={() => this.onCommentDeleteClick(post, comment)}>Delete</button>
+          <button className="button button-secondary button-small" onClick={() => {
             this.setState({ editingComment: comment._id, commentFormContent: comment.content })
           }}>Edit</button>
         </div>
@@ -245,13 +246,14 @@ class PostShow extends Component {
 
   render() {
 
-    const { title, tags, mainMedia, content } = this.props.post
+    const { title, tags, mainMedia, content, created } = this.props.post
     const commentClass = this.state.detached ? 'u-padding-bottom-comment-box' : ''
 
     return (
       <div className={`posts-show-page ${commentClass}`}>
         <div className="post">
-          <h2 className="heading-secondary post__title u-margin-bottom-small">{title}</h2>
+          <h2 className="heading-secondary post__title u-margin-bottom-small">{title || "(No title)"}</h2>
+          <span>{moment(created).format('MMMM Do, YYYY')}</span>
           {this.renderTagsSection(tags)}
           {this.renderMainMedia(mainMedia)}
           <div className="post__content">{renderHTML(content)}</div>

@@ -1,5 +1,7 @@
 const SettingsModel = require('../models/settings')
 const UserModel = require('../models/user')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class AdminRoutes {
 
@@ -86,6 +88,11 @@ class AdminRoutes {
 
 
   async changeSettings(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     // Update the settings document in the db
     const settingsDocument = { _id: this.settings._id }

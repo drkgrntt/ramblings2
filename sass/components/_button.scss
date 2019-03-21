@@ -21,41 +21,41 @@
   }
 
   &-primary {
-    border: .2rem solid $color-primary-3;
+    border: .2rem solid $color-primary;
     color: $color-white;
-    background-color: $color-primary-3;
+    background-color: $color-primary;
     transition: all .3s;
 
     &:hover {
-      color: $color-primary-3;
+      color: $color-primary;
       background-color: transparent;
-      border: .2rem solid $color-primary-3;
+      border: .2rem solid $color-primary;
     }
   }
 
   &-secondary {
-    border: .2rem solid $color-secondary-0;
+    border: .2rem solid $color-secondary;
     color: $color-white;
-    background-color: $color-secondary-0;
+    background-color: $color-secondary;
     transition: all .3s;
 
     &:hover {
-      color: $color-secondary-0;
+      color: $color-secondary;
       background-color: transparent;
-      border: .2rem solid $color-secondary-0;
+      border: .2rem solid $color-secondary;
     }
   }
 
   &-tertiary {
-    border: .2rem solid $color-tertiary-0;
+    border: .2rem solid $color-tertiary;
     color: $color-white;
-    background-color: $color-tertiary-0;
+    background-color: $color-tertiary;
     transition: all .3s;
 
     &:hover {
-      color: $color-tertiary-0;
+      color: $color-tertiary;
       background-color: transparent;
-      border: .2rem solid $color-tertiary-0;
+      border: .2rem solid $color-tertiary;
     }
   }
 }

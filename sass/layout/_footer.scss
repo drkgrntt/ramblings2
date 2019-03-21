@@ -1,6 +1,5 @@
 .footer {
-  background-color: $color-grey-light-2;
-  min-height: 20rem;
+  background-color: rgba($color-grey-light-2, .4);
   padding: 2rem;
   position: relative;
 
@@ -23,17 +22,16 @@
 }
 
 .credit {
-  margin-top: 4rem;
 
   &__text {
-    color: $color-grey;
+    color: $color-grey-dark;
   }
   
   &__link {
     &:link,
     &:visited {
       text-decoration: none;
-      color: $color-grey;
+      color: $color-grey-dark;
     }
   }
 }

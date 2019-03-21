@@ -1,4 +1,6 @@
 const ProductModel = require('../models/product')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class StoreRoutes {
 
@@ -66,6 +68,11 @@ class StoreRoutes {
 
   createProduct(req, res) {
 
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
+
     const product = new ProductModel(req.body)
 
     product.save()
@@ -101,6 +108,11 @@ class StoreRoutes {
 
 
   async updateProduct(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const productDocument = { _id: req.params.id }
     const updatedProduct = await ProductModel.findOneAndUpdate(productDocument, req.body)

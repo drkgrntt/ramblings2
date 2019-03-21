@@ -4,44 +4,33 @@ import { connect } from 'react-redux'
 
 class NavMenu extends Component {
 
-  renderStoreItem() {
-
-    const { settings } = this.props
-
-    if (!!settings && settings.enableStore) {
-
-      return (
-        <Link href="/store">
-          <li onClick={() => this.onClick()} className="nav-menu__item">
-            <a>Store</a>
-          </li>
-        </Link>
-      )
-    }
-  }
-
-
-  renderDonateItem() {
-
-    const { settings } = this.props
-
-    if (!!settings && settings.enableDonations) {
-      return (
-        <Link href="/donate">
-          <li className="nav-menu__item" onClick={() => this.onClick()}>
-            <a>Donate</a>
-          </li>
-        </Link>
-      )
-    }
-  }
-
-
   onClick() {
 
     const checkbox = document.getElementById('nav-menu-checkbox')
 
     checkbox.classList.toggle('checked')
+  }
+
+
+  renderAuthenticator() {
+
+    if (!!this.props.currentUser) {
+      return (
+        <Link href="/profile">
+          <li onClick={() => this.onClick()} className="nav-menu__item">
+            <a>Profile</a>
+          </li>
+        </Link>
+      )
+    }
+
+    return (
+      <Link href="/login">
+        <li onClick={() => this.onClick()} className="nav-menu__item">
+          <a>Login</a>
+        </li>
+      </Link>
+    )
   }
 
 
@@ -51,7 +40,7 @@ class NavMenu extends Component {
       <nav>
         <ul className="nav-menu">
 
-          <Link href="/">
+          <Link href="/blog">
             <div className="nav-menu__logo">
               <img src={this.props.logo} />
             </div>
@@ -65,7 +54,7 @@ class NavMenu extends Component {
               className="nav-menu__item nav-menu__item--hamburger"
             ></label>
 
-            <Link href="/">
+            <Link href="/blog">
               <li onClick={() => this.onClick()} className="nav-menu__item">
                 <a>Home</a>
               </li>
@@ -77,26 +66,14 @@ class NavMenu extends Component {
               </li>
             </Link>
 
-            <Link href="/services">
+            <Link href="/blog_all" as="/blog/all">
               <li onClick={() => this.onClick()} className="nav-menu__item">
-                <a>Services</a>
+                <a>All Blog Posts</a>
               </li>
             </Link>
 
-            <Link href="/contact">
-              <li onClick={() => this.onClick()} className="nav-menu__item">
-                <a>Contact</a>
-              </li>
-            </Link>
+            {this.renderAuthenticator()}
 
-            <Link href="/blog">
-              <li onClick={() => this.onClick()} className="nav-menu__item">
-                <a>Blog</a>
-              </li>
-            </Link>
-
-            {this.renderStoreItem()}
-            {this.renderDonateItem()}
           </div>
 
         </ul>
@@ -107,7 +84,7 @@ class NavMenu extends Component {
 
 
 const mapStateToProps = state => {
-  return { settings: state.settings }
+  return { settings: state.settings, currentUser: state.currentUser }
 }
 
 

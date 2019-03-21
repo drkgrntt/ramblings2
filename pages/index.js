@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import PostsFilter from '../components/PostsFilter'
-import SectionCards from '../components/SectionCards'
-import SectionMedia from '../components/SectionMedia'
-import SectionStandard from '../components/SectionStandard'
-import SectionSlideshow from '../components/SectionSlideshow'
+import BlogPage from './blog'
 
 class Landing extends Component {
 
@@ -30,80 +26,7 @@ class Landing extends Component {
 
     return (
       <div className="landing">
-        <PostsFilter
-          component={SectionCards}
-          posts={posts}
-          settings={{
-            maxPosts: 3,
-            postTags: 'sample'
-          }}
-          componentProps={{
-            title: 'This is the Section Card component',
-            contentLength: 200,
-            readMore: true,
-            perRow: 3
-          }}
-        />
-        <PostsFilter
-          component={SectionMedia}
-          posts={posts}
-          settings={{
-            maxPosts: 1,
-            postTags: 'video-section'
-          }}
-          componentProps={{
-            className: "section-video",
-            // fixed: true
-          }}
-        />
-        <PostsFilter
-          component={SectionStandard}
-          posts={posts}
-          settings={{
-            postTags: 'services',
-            maxPosts: 2
-          }}
-          componentProps={{
-            title: 'This is the Standard Section',
-          }}
-        />
-        <PostsFilter
-          component={SectionMedia}
-          posts={posts}
-          settings={{
-            postTags: 'books',
-            maxPosts: 1
-          }}
-          componentProps={{
-            className: 'section-image',
-            fixed: true
-          }}
-        />
-        <PostsFilter
-          component={SectionCards}
-          posts={posts}
-          settings={{
-            maxPosts: 4,
-            postTags: 'sample'
-          }}
-          componentProps={{
-            title: 'Another Card Section',
-            contentLength: 100,
-            perRow: 4,
-            readMore: true
-          }}
-        />
-        <PostsFilter
-          component={SectionSlideshow}
-          posts={posts}
-          settings={{
-            maxPosts: 4,
-            postTags: 'slideshow-section'
-          }}
-          componentProps={{
-            timer: 5000
-          }}
-        />
+        <BlogPage />
       </div>
     )
   }

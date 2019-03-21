@@ -1,7 +1,6 @@
 .section-cards { 
-  padding: 5%;
+  padding: 0 5rem;
   padding-bottom: 10rem;
-  background-color: $color-grey-light;
 
   &__list {
     margin-top: 3vw;
@@ -56,7 +55,8 @@
 
   &__title {
     letter-spacing: .1rem;
-    font-size: 3rem;
+    font-size: 2.2rem;
+    line-height: 1;
     font-weight: 500;
   }
 

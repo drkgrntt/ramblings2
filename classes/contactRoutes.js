@@ -1,6 +1,8 @@
 const MessageModel = require('../models/message')
 const Mailer = require('./mailer')
 const keys = require('../config/keys')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class ContactRoutes {
 
@@ -32,6 +34,11 @@ class ContactRoutes {
 
 
   createMessage(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const { contactName, contactEmail, contactMessage } = req.body
     const messageObj = {

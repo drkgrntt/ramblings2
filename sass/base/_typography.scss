@@ -7,17 +7,22 @@ body {
 }
 
 .heading-primary {
-  color: $color-grey-light;
+  color: $color-grey-dark;
   text-transform: uppercase;
   display: inline-block;
-  font-family: 'Lato', sans-serif;
 
   &--main {
-    font-size: 5rem;
+    font-size: 6rem;
     letter-spacing: 1rem;
-    font-weight: 400;
     display: block;
     margin-bottom: 2rem;
+
+    font-family: 'Indie Flower', cursive;
+    text-shadow:
+      -1px -1px 0 #eee,
+      1px -1px 0 #eee,
+      -1px 1px 0 #eee,
+      1px 1px 0 #eee;
 
     animation: moveInLeft 1s ease-out;
 
@@ -61,7 +66,7 @@ body {
   text-transform: uppercase;
   font-weight: 700;
   display: block;
-  color: $color-primary-0;
+  color: $color-grey-dark;
   letter-spacing: .7rem;
 }
 

@@ -36,7 +36,7 @@ class BlogPage extends Component {
   render() {
 
     return (
-      <div>
+      <div className="blog-page">
         <PostsFilter
           component={SectionCards}
           posts={this.props.blogs}
@@ -45,11 +45,11 @@ class BlogPage extends Component {
             maxPosts: "9999"
           }}
           componentProps={{
-            title: 'Blog',
-            perRow: 4,
+            // title: 'Blog',
+            perRow: 3,
             readMore: true,
             path: 'blog',
-            contentLength: 200
+            contentLength: 100
           }}
         />
       </div>

@@ -1,5 +1,7 @@
 const keys = require('../config/keys')
 const stripe = require('stripe')(keys.stripeSecretTestKey)
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class PaymentRoutes {
 
@@ -34,6 +36,11 @@ class PaymentRoutes {
 
 
   async createDonation(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const { source, amount, email } = req.body
     const paymentDetails = {

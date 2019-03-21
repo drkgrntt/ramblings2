@@ -1,8 +1,7 @@
-const cloudinary = require('cloudinary')
-const multer = require('multer')
 const PostModel = require('../models/post')
 const CommentModel = require('../models/comment')
-const keys = require('../config/keys')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class BlogRoutes {
 
@@ -69,6 +68,11 @@ class BlogRoutes {
 
   createBlog(req, res) {
 
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
+
     const blog = new PostModel(req.body)
     blog.author = req.user
     blog.type = 'blog'
@@ -106,6 +110,11 @@ class BlogRoutes {
 
 
   async updateBlog(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const updatedBlog = await PostModel.findOneAndUpdate({ _id: req.params.id }, req.body)
 

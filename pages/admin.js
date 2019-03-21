@@ -124,7 +124,7 @@ class AdminPage extends Component {
           <label className="settings-form__label" htmlFor="enable-emailing">Enable Emailing</label>
         </div>
 
-        <div className="settings-form__field">
+        {/* <div className="settings-form__field">
           <input
             className="settings-form__checkbox"
             type="checkbox"
@@ -133,7 +133,7 @@ class AdminPage extends Component {
             onChange={() => this.setState({ enableMenu: !enableMenu })}
           />
           <label className="settings-form__label" htmlFor="enable-menu">Enable Menu</label>
-        </div>
+        </div> */}
 
         <div className="settings-form__field">
           <input
@@ -146,7 +146,7 @@ class AdminPage extends Component {
           <label className="settings-form__label" htmlFor="enable-commenting">Enable Commenting</label>
         </div>
 
-        <div className="settings-form__field">
+        {/* <div className="settings-form__field">
           <input
             className="settings-form__checkbox"
             type="checkbox"
@@ -155,7 +155,7 @@ class AdminPage extends Component {
             onChange={() => this.setState({ enableDonations: !enableDonations })}
           />
           <label className="settings-form__label" htmlFor="enable-donations">Enable Donations</label>
-        </div>
+        </div> */}
 
         <div className="settings-form__field">
           <input
@@ -168,7 +168,7 @@ class AdminPage extends Component {
           <label className="settings-form__label" htmlFor="enable-registration">Enable User Registration</label>
         </div>
 
-        <div className="settings-form__field">
+        {/* <div className="settings-form__field">
           <input
             className="settings-form__checkbox"
             type="checkbox"
@@ -177,7 +177,7 @@ class AdminPage extends Component {
             onChange={() => this.setState({ enableStore: !enableStore })}
           />
           <label className="settings-form__label" htmlFor="enable-store">Enable Store</label>
-        </div>
+        </div> */}
 
         <div className="settings-form__submit">
           <input type="submit" className="button button-primary" />

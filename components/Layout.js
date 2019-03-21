@@ -9,29 +9,27 @@ const Layout = props => {
     <div className="app">
 
       <Head>
-        <title>Derek Garnett</title>
+        <title>Ramblings | A Blog</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:600" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700|Montserrat:200,300,400,500,600,700" rel="stylesheet" />
         <script src="https://js.stripe.com/v3/"></script>
       </Head>
 
       <NavMenu
-        logo='https://img.icons8.com/metro/1600/source-code.png'
+        logo='https://cardinia.pozi.com/img/font-awesome/black/paint-brush.svg'
       />
 
       <Header
-        mainTitle="Derek Garnett"
-        subTitle="Web Development and Design"
+        mainTitle="Ramblings"
       />
 
       <main>
         {props.children}
       </main>
 
-      <Footer
-        ctaText="Get in touch"
-        ctaButtonText="contact"
-      />
+      <Footer />
 
     </div>
   )

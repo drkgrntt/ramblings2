@@ -94,11 +94,7 @@ app.prepare().then(() => {
 
   // Root Route
   server.get('/', async (req, res) => {
-    const actualPage = '/index'
-    const posts = await Post.find({ published: true }).sort({ created: -1 })
-    const queryParams = { posts }
-
-    app.render(req, res, actualPage, queryParams)
+    res.redirect('/blog')
   })
 
   server.post('/api/googleAnalyticsId', (req, res) => {
@@ -113,8 +109,8 @@ app.prepare().then(() => {
   new AdminRoutes(server, app)
   new AuthRoutes(server, app)
   new PostRoutes(server, app)
-  new ContactRoutes(server, app)
-  new PaymentRoutes(server, app)
+  // new ContactRoutes(server, app)
+  // new PaymentRoutes(server, app)
   new BlogRoutes(server, app)
   // new StoreRoutes( server, app )
 

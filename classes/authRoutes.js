@@ -1,6 +1,8 @@
 const UserModel = require('../models/user')
 const Mailer = require('./mailer')
 const passport = require('passport')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class AuthRoutes {
 
@@ -53,6 +55,11 @@ class AuthRoutes {
 
   registerUser(req, res) {
 
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
+
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const { firstName, lastName, username, password, passwordConfirm } = req.body
 
@@ -103,6 +110,11 @@ class AuthRoutes {
 
   async updateCurrentUser(req, res) {
 
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
+
     const { userId, firstName, lastName } = req.body
 
     // Make sure the user submitting the form is the logged in on the server
@@ -119,6 +131,11 @@ class AuthRoutes {
 
 
   changeUserPassword(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const { oldPassword, newPassword, newPasswordConfirm, userId } = req.body
 

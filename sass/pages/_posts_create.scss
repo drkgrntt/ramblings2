@@ -1,6 +1,9 @@
 .posts-create-page {
-  background-color: $color-grey-light;
-  padding: 5rem 17vw;
+  background-color: rgba($color-grey-light, .8);
+  margin: 0 20rem;
+  margin-bottom: 5rem;
+  padding: 1rem 3rem;
+  border-radius: .8rem;
 
   @include respond(tab-port) {
     padding: 4rem 12vw;

@@ -45,10 +45,11 @@ class BlogPage extends Component {
           component={SectionStandard}
           posts={this.props.blogs}
           settings={{
-            maxPosts: "5"
+            maxPosts: "5",
+            contentLength: 100
           }}
           componentProps={{
-            title: 'Blog',
+            // title: 'Blog',
             mediaLeft: true,
             readMore: true,
             path: 'blog'

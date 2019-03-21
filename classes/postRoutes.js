@@ -3,6 +3,8 @@ const multer = require('multer')
 const PostModel = require('../models/post')
 const CommentModel = require('../models/comment')
 const keys = require('../config/keys')
+const sanitizeHTML = require('sanitize-html')
+const _ = require('lodash')
 
 class PostRoutes {
 
@@ -107,6 +109,11 @@ class PostRoutes {
 
   createPost(req, res) {
 
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
+
     const post = new PostModel(req.body)
     post.author = req.user
 
@@ -143,6 +150,11 @@ class PostRoutes {
 
 
   async updatePost(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const postDocument = { _id: req.params.id }
     const updatedPost = await PostModel.findOneAndUpdate(postDocument, req.body)
@@ -182,6 +194,11 @@ class PostRoutes {
 
 
   async updateComment(req, res) {
+
+    // Santize inputs
+    _.map(req.body, (input) => {
+      req.body[input] = sanitizeHTML(input);
+    })
 
     const commentDocument = { _id: req.params.comment_id }
     const updatedComment = await CommentModel.findOneAndUpdate(commentDocument, req.body)

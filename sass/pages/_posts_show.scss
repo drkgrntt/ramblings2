@@ -1,7 +1,10 @@
 .posts-show-page {
-  padding: 3rem 10vw;
-  background-color: $color-grey-light;
+  margin: 0 15vw;
+  margin-bottom: 5rem;
+  background-color: rgba($color-grey-light, .7);
+  border-radius: .8rem;
   min-height: 50rem;
+  padding-bottom: 2rem;
 }
 
 .post {
