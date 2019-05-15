@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { setCurrentUser, setPosts, setPost, setBlogs, setBlog, setUsers, setSettings, setStripePubKey } from '../store'
 import Layout from '../components/Layout'
 import { initGA, logPageView } from '../utilities/analytics'
-import '../sass/main.scss'
+import '../sass/main.scss' 
 
 class MyApp extends App {
 
