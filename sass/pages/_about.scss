@@ -7,4 +7,14 @@
   white-space: pre-wrap;
 
   background-color: rgba($color-grey-light, .7);
+
+  @include respond(tab-land) {
+    margin: 0 12rem;
+    margin-bottom: 5rem;
+  }
+
+  @include respond(tab-port) {
+    margin: 0 6rem;
+    margin-bottom: 5rem;
+  }
 }

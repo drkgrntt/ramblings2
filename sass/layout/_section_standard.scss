@@ -1,15 +1,15 @@
 .section-standard {
   padding: 0 5rem;
-  padding-bottom: 10rem;
+  // margin-bottom: 10rem;
   white-space: pre-wrap;
 
   &__post {
-    margin-bottom: 3rem;
+    padding-bottom: 3rem;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 4rem;
-    align-items: center;
+    align-items: start;
 
     @include respond(tab-port) {
       grid-template-columns: repeat(2, 1fr);
@@ -17,6 +17,8 @@
 
     @include respond(phone) {
       grid-template-columns: 1fr;
+      border-bottom: .1rem solid $color-grey;
+      margin-bottom: 2rem;
     }
   }
 

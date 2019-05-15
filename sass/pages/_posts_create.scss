@@ -5,8 +5,15 @@
   padding: 1rem 3rem;
   border-radius: .8rem;
 
+  @include respond(tab-land) {
+    margin: 0 12rem;
+    margin-bottom: 5rem;
+  }
+
   @include respond(tab-port) {
     padding: 4rem 12vw;
+    margin: 0 6rem;
+    margin-bottom: 5rem;
   }
 
   @include respond(phone) {

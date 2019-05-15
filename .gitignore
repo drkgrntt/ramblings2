@@ -2,3 +2,7 @@ node_modules
 .next
 config/dev.js
 .env
+
+ramblingscomments.json
+ramblingsdb.json
+ramblingsusers.json

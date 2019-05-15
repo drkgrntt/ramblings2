@@ -12,7 +12,7 @@ class PostsFilter extends Component {
     const { maxPosts, postTags } = props.settings
 
     // Filter posts by postTags and maxPosts
-    if (!!postTags && postTags.length > 0) {
+    if (!!postTags && postTags.length > 0 && !!maxPosts) {
       posts = props.posts.filter(post => {
         let included = false
 
@@ -33,6 +33,21 @@ class PostsFilter extends Component {
         if (included) { numberPosts++ }
         return included
       })
+
+    // Only filter by maxPosts
+    } else if (!!maxPosts) {
+
+      posts = props.posts.filter(() => {
+        let included = false
+
+        if ( numberPosts < maxPosts ) {
+          included = true
+        }
+
+        if (included) { numberPosts++ }
+        return included
+      })
+
     } else {
       posts = props.posts
     }

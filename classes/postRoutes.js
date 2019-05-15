@@ -59,9 +59,9 @@ class PostRoutes {
     this.server.delete('/api/posts/:id', this.checkIfAdmin.bind(this), this.deletePost.bind(this))
 
     // Comment API
-    this.server.post('/api/post/:id/comments', this.allowUserComments, this.createComment.bind(this))
-    this.server.put('/api/post/:id/comments/:comment_id', this.allowUserComments, this.updateComment.bind(this))
-    this.server.delete('/api/post/:id/comments/:comment_id', this.allowUserComments, this.deleteComment.bind(this))
+    this.server.post('/api/posts/:id/comments', this.allowUserComments, this.createComment.bind(this))
+    this.server.put('/api/posts/:id/comments/:comment_id', this.allowUserComments, this.updateComment.bind(this))
+    this.server.delete('/api/posts/:id/comments/:comment_id', this.allowUserComments, this.deleteComment.bind(this))
   }
 
 
@@ -178,7 +178,7 @@ class PostRoutes {
 
 
   async createComment(req, res) {
-
+console.log('asdf')
     const { body, user, params } = req
     const comment = new CommentModel({
       content: body.content,

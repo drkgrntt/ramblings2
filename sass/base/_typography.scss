@@ -50,7 +50,7 @@ body {
     animation-fill-mode: backwards;
 
     @include respond(tab-land) {
-      margin-bottom: 2rem;
+      // margin-bottom: 2rem;
       font-size: 2rem;
     }
 

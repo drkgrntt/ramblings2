@@ -21,41 +21,47 @@
   }
 
   &-primary {
-    border: .2rem solid $color-primary;
+    border: .2rem solid rgba($color-primary, .4);
     color: $color-white;
-    background-color: $color-primary;
+    text-shadow: -1px 0 rgba($color-primary, .7), 0 1px rgba($color-primary, .7), 1px 0 rgba($color-primary, .7), 0 -1px rgba($color-primary, .7);
+    background-color: rgba($color-primary, .4);
     transition: all .3s;
 
     &:hover {
-      color: $color-primary;
+      color: rgba($color-primary, .7);
+      text-shadow: none;
       background-color: transparent;
-      border: .2rem solid $color-primary;
+      border: .2rem solid rgba($color-primary, .4);
     }
   }
 
   &-secondary {
-    border: .2rem solid $color-secondary;
+    border: .2rem solid rgba($color-secondary, .4);
     color: $color-white;
-    background-color: $color-secondary;
+    text-shadow: -1px 0 rgba($color-secondary, .7), 0 1px rgba($color-secondary, .7), 1px 0 rgba($color-secondary, .7), 0 -1px rgba($color-secondary, .7);
+    background-color: rgba($color-secondary, .4);
     transition: all .3s;
 
     &:hover {
-      color: $color-secondary;
+      color: rgba($color-secondary, .7);
       background-color: transparent;
-      border: .2rem solid $color-secondary;
+      text-shadow: none;
+      border: .2rem solid rgba($color-secondary, .4);
     }
   }
 
   &-tertiary {
-    border: .2rem solid $color-tertiary;
+    border: .2rem solid rgba($color-tertiary, .4);
     color: $color-white;
-    background-color: $color-tertiary;
+    text-shadow: -1px 0 rgba($color-tertiary, .7), 0 1px rgba($color-tertiary, .7), 1px 0 rgba($color-tertiary, .7), 0 -1px rgba($color-tertiary, .7);
+    background-color: rgba($color-tertiary, .4);
     transition: all .3s;
 
     &:hover {
-      color: $color-tertiary;
+      color: rgba($color-tertiary, .7);
       background-color: transparent;
-      border: .2rem solid $color-tertiary;
+      text-shadow: none;
+      border: .2rem solid rgba($color-tertiary, .4);
     }
   }
 }

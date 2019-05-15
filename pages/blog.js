@@ -20,17 +20,12 @@ class BlogPage extends Component {
 
   renderAllBlogsLink() {
 
-    let blogs = []
-    _.map(this.props.blogs, blog => {
-      if (blog.tags.includes('blog')) {
-        blogs.push(blog)
-      }
-    })
+    const { blogs } = this.props
 
     if (blogs.length > 5) {
       return (
         <Link href="/blog_all" as="/blog/all">
-          <a className="blog-page__button button button-secondary">See all blog posts</a>
+          <a className="blog-page__button button button-secondary u-margin-bottom-small">See all blog posts</a>
         </Link>
       )
     }
@@ -45,11 +40,10 @@ class BlogPage extends Component {
           component={SectionStandard}
           posts={this.props.blogs}
           settings={{
-            maxPosts: "5",
-            contentLength: 100
+            maxPosts: 5
           }}
           componentProps={{
-            // title: 'Blog',
+            contentLength: 200,
             mediaLeft: true,
             readMore: true,
             path: 'blog'
