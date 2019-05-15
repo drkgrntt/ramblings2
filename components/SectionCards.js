@@ -6,6 +6,13 @@ import Media from './Media'
 
 class SectionCards extends Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = { searchText: '', posts: props.posts }
+  }
+
+
   renderReadMore(post) {
 
     if (this.props.readMore) {
@@ -22,7 +29,8 @@ class SectionCards extends Component {
 
   renderPosts() {
 
-    const { path, posts, contentLength } = this.props
+    const { path, contentLength } = this.props
+    const { posts } = this.state
 
     if (posts.length !== 0) {
 
@@ -42,8 +50,29 @@ class SectionCards extends Component {
         )
       })
     } else {
-      return <h3 className="heading-tertiary">There are no {path}s yet.</h3>
+      return <h3 className="heading-tertiary">No found {path}s.</h3>
     }
+  }
+
+
+  onSearchTextChange(event) {
+
+    this.setState({ searchText: event.target.value })
+
+    let foundPosts = []
+
+    // Go through each post
+    _.map(this.props.posts, post => {
+
+      let isFound = false
+
+      // If we are searching for the title and we haven't already included the post, include it
+      if (post.title.toLowerCase().includes(event.target.value.toLowerCase()) && !isFound) {
+        foundPosts.push(post)
+      }
+    })
+
+    this.setState({ posts: foundPosts })
   }
 
 
@@ -55,6 +84,16 @@ class SectionCards extends Component {
     return (
       <section className='section-cards'>
         <h2 className='heading-secondary section-cards__header'>{title}</h2>
+        <input
+          className="section-cards__search--input"
+          type="text"
+          placeholder="Search by Title"
+          id="posts-search"
+          name="search"
+          value={this.state.searchText}
+          onChange={event => this.onSearchTextChange(event)}
+        /> 
+        {/* <label htmlFor="posts-search" className="section-cards__serach--label">Search Posts</label> */}
         <ul className={`section-cards__list ${listCountClass}`}>
           {this.renderPosts()}
         </ul>

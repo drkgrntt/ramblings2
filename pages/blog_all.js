@@ -5,7 +5,7 @@ import keys from '../config/keys'
 import PostsFilter from '../components/PostsFilter'
 import SectionCards from '../components/SectionCards'
 
-class BlogPage extends Component {
+class BlogAllPage extends Component {
 
   static async getInitialProps({ req, query, reduxStore }) {
 
@@ -45,7 +45,7 @@ class BlogPage extends Component {
             maxPosts: "9999"
           }}
           componentProps={{
-            // title: 'Blog',
+            title: 'Blog Posts',
             perRow: 3,
             readMore: true,
             path: 'blog',
@@ -63,4 +63,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps)(BlogPage)
+export default connect(mapStateToProps)(BlogAllPage)
