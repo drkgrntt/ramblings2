@@ -205,6 +205,6 @@ const migrateComments = async () => {
   })
 }
 
-migrateUsers()
-migrateComments()
-migratePosts()
+// migrateUsers()
+// migrateComments()
+// migratePosts()
