@@ -11,9 +11,7 @@ const keys = require('./config/keys')
 
 // Models
 const Settings = require('./models/settings')
-const Post = require('./models/post')
 const User = require('./models/user')
-const Comment = require('./models/comment')
 
 // Classes
 const ContactRoutes = require('./classes/contactRoutes')
@@ -130,81 +128,3 @@ app.prepare().then(() => {
   console.error(ex.stack)
   process.exit(1)
 })
-
-// DB migration
-const migratePosts = async () => {
-
-  // Get the admin user
-  const ceanne = await User.findOne({ email: 'cmaxey02@gmail.com' })
-
-  const posts = await Post.find()
-  posts.forEach(async (post, i) => {
-    const doc = post._doc
-
-    if (!doc.content) {
-      const newDoc = {
-        type: 'blog',
-        title: doc.title,
-        content: doc.body,
-        tags: [doc.category],
-        mainMedia: doc.image,
-        subImages: [],
-        comments: doc.comments,
-        published: true,
-        author: ceanne
-      }
-
-      await Post.findByIdAndUpdate(doc._id, newDoc)
-    }
-  })
-}
-
-const migrateUsers = async () => {
-
-  const users = await User.find()
-  users.forEach(async (post, i) => {
-    const doc = post._doc
-
-    if (!doc.firstName) {
-
-      const { isAdmin, isSubscribed, created, _id, email, username } = doc
-      const newDoc = {
-        isAdmin: isAdmin,
-        username: email,
-        firstName: username,
-        lastName: '',
-        isSubscribed: isSubscribed,
-        created: created,
-      }
-
-      await User.findOneAndUpdate({ _id }, newDoc)
-    }
-  })
-}
-
-const migrateComments = async () => {
-
-  const comments = await Comment.find()
-
-  comments.forEach(async (post, i) => {
-    const doc = post._doc
-
-    if (!doc.content) {
-
-      const { text, replies, created, author, _id } = doc
-
-      const newDoc = {
-        content: text,
-        replies: replies,
-        created: created,
-        author: author.id
-      }
-
-      await Comment.findByIdAndUpdate(_id, newDoc)
-    }
-  })
-}
-
-// migrateUsers()
-// migrateComments()
-// migratePosts()

@@ -30,6 +30,9 @@ class BlogRoutes {
     this.server.get('/api/blogs/:id', this.sendOneBlog.bind(this))
     this.server.put('/api/blogs/:id', this.checkIfAdmin.bind(this), this.updateBlog.bind(this))
     this.server.delete('/api/blogs/:id', this.checkIfAdmin.bind(this), this.deleteBlog.bind(this))
+
+    // Due to outdated routes, reditect anything from /blogs to /blog
+    this.server.get('/blogs/*', this.redirect.bind(this))
   }
 
 
@@ -52,6 +55,14 @@ class BlogRoutes {
     } else {
       res.status(401).send({ message: 'You are not allowed to do that' })
     }
+  }
+
+
+  redirect(req, res) {
+
+    let { url } = req
+    url = url.replace('blogs', 'blog')
+    res.redirect(url)
   }
 
 
