@@ -113,32 +113,3 @@ app.prepare().then(() => {
   console.error(ex.stack)
   process.exit(1)
 })
-
-const migrateBlogs = async () => {
-
-  const Post = require('./models/post')
-  const Blog = require('./models/blog')
-
-  const blogs = await Post.find({ type: 'blog' })
-
-  blogs.forEach(async blog => {
-    const newBlog = new Blog({
-      title: blog.title,
-      content: blog.content,
-      tags: blog.tags,
-      mainMedia: blog.mainMedia,
-      subImages: blog.subImages,
-      published: blog.published,
-      comments: blog.comments,
-      created: blog.created,
-      author: blog.author,
-      _id: blog._id
-    })
-
-    newBlog.save()
-
-    await Post.findByIdAndDelete(blog._id)
-  })
-}
-
-migrateBlogs()
