@@ -1,37 +1,76 @@
+const Controller = require('./abstractController')
 const UserModel = require('../models/user')
 const Mailer = require('./mailer')
 const passport = require('passport')
-const sanitizeHTML = require('sanitize-html')
+const { sanitizeRequestBody } = require('../utilities/middleware')
+const { configureSettings } = require('../utilities/functions')
 const _ = require('lodash')
 
-class AuthRoutes {
 
-  constructor(server, app) {
+class AuthRoutes extends Controller {
 
-    this.server = server
-    this.app = app
+  registerSettings() {
+    
+    // Middleware to configure auth settings
+    this.server.use(async (req, res, next) => {
 
-    this.registerRoutes()
+      const defaultSettings = { enableRegistration: true }
+      const settings = await configureSettings('auth', defaultSettings)
+
+      _.map(settings, (optionValue, optionKey) => {
+        res.locals.settings[optionKey] = optionValue
+      })
+      next()
+    })
   }
 
 
   registerRoutes() {
 
     // Views
-    this.server.get('/login', this.renderPage.bind(this))
-    this.server.get('/profile', this.renderPage.bind(this))
+    this.server.get(
+      '/login', 
+      this.renderPage.bind(this)
+    )
+    this.server.get(
+      '/profile', 
+      this.renderPage.bind(this)
+    )
 
     // API
-    this.server.post('/api/register', this.registerUser.bind(this))
-    this.server.post('/api/login', passport.authenticate('local', {}), this.sendCurrentUser.bind(this))
-    this.server.get('/api/currentUser', this.sendCurrentUser.bind(this))
-    this.server.put('/api/currentUser', this.updateCurrentUser.bind(this))
-    this.server.post('/api/changePassword', this.changeUserPassword.bind(this))
-    this.server.get('/api/logout', this.logoutUser.bind(this))
+    this.server.post(
+      '/api/register', 
+      this.allowRegisterUser, 
+      this.registerUser.bind(this)
+    )
+    this.server.post(
+      '/api/login', 
+      sanitizeRequestBody,
+      passport.authenticate('local', {}), 
+      this.sendCurrentUser.bind(this)
+    )
+    this.server.get(
+      '/api/currentUser', 
+      this.sendCurrentUser.bind(this)
+    )
+    this.server.put(
+      '/api/currentUser', 
+      sanitizeRequestBody,
+      this.updateCurrentUser.bind(this)
+    )
+    this.server.post(
+      '/api/changePassword',
+      sanitizeRequestBody, 
+      this.changeUserPassword.bind(this)
+    )
+    this.server.get(
+      '/api/logout', 
+      this.logoutUser.bind(this)
+    )
   }
 
 
-  allowRegister(req, res, next) {
+  allowRegisterUser(req, res, next) {
 
     if (res.locals.settings.enableRegistration) {
       next()
@@ -49,16 +88,11 @@ class AuthRoutes {
 
   sendCurrentUser(req, res) {
 
-    res.send(res.locals.currentUser)
+    res.send(req.user)
   }
 
 
   registerUser(req, res) {
-
-    // Santize inputs
-    _.map(req.body, (input) => {
-      req.body[input] = sanitizeHTML(input);
-    })
 
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const { firstName, lastName, username, password, passwordConfirm } = req.body
@@ -110,11 +144,6 @@ class AuthRoutes {
 
   async updateCurrentUser(req, res) {
 
-    // Santize inputs
-    _.map(req.body, (input) => {
-      req.body[input] = sanitizeHTML(input);
-    })
-
     const { userId, firstName, lastName } = req.body
 
     // Make sure the user submitting the form is the logged in on the server
@@ -131,11 +160,6 @@ class AuthRoutes {
 
 
   changeUserPassword(req, res) {
-
-    // Santize inputs
-    _.map(req.body, (input) => {
-      req.body[input] = sanitizeHTML(input);
-    })
 
     const { oldPassword, newPassword, newPasswordConfirm, userId } = req.body
 

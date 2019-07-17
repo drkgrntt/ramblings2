@@ -1,3 +1,19 @@
+/**
+ * PostsFilter filters an array of posts by tags and number of posts
+ * to provide for a component
+ * 
+ * props include:
+ *   settings: Object{
+ *     maxPosts: Integer - The maximum number of posts to render in the passed component
+ *     postTags: Array [String - Any accepted tags to use in the passed component]
+ *     strictTags: Array [String - Any required tags to use in the passed component]
+ *   }
+ *   posts: Array [Object - Any posts to run through the filter]
+ *   component: Component/Function - The component to pass the filtered posts to as this.props.posts
+ *   componentProps: Object - Any props required for the passed component
+ */
+
+
 import React, { Component } from 'react'
 import _ from 'lodash'
 
@@ -9,10 +25,10 @@ class PostsFilter extends Component {
 
     let posts = []
     let numberPosts = 0
-    const { maxPosts, postTags } = props.settings
+    const { maxPosts, postTags, strictTags } = props.settings
 
     // Filter posts by postTags and maxPosts
-    if (!!postTags && postTags.length > 0 && !!maxPosts) {
+    if (!!postTags && postTags.length > 0) {
       posts = props.posts.filter(post => {
         let included = false
 
@@ -25,7 +41,12 @@ class PostsFilter extends Component {
         } else {
           _.map(postTags, tag => {
             if (post.tags.includes(tag) && numberPosts < maxPosts) {
+
               included = true
+            }
+            
+            if (strictTags && !post.tags.includes(tag)) {
+              included = false
             }
           })
         }
@@ -34,22 +55,19 @@ class PostsFilter extends Component {
         return included
       })
 
-    // Only filter by maxPosts
-    } else if (!!maxPosts) {
-
-      posts = props.posts.filter(() => {
-        let included = false
-
-        if ( numberPosts < maxPosts ) {
-          included = true
-        }
-
-        if (included) { numberPosts++ }
-        return included
-      })
-
     } else {
-      posts = props.posts
+      if (!postTags && !!maxPosts) {
+        posts = props.posts.filter(post => {
+          if (numberPosts < maxPosts) {
+            numberPosts++
+            return true
+          } else {
+            return false
+          }
+        })
+      } else {
+        posts = props.posts
+      }
     }
 
     this.state = { posts }

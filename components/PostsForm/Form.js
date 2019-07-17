@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import RichTextEditor from './RichTextEditor'
-import Media from './Media'
+import _ from 'lodash'
+import RichTextEditor from '../RichTextEditor'
+import Media from '../Media'
 
-class ProductsForm extends Component {
+class Form extends Component {
 
   constructor(props) {
+
     super(props)
 
-    this.state = { imageUpload: false, uploadedImage: false, dots: '' }
+    this.state = { mediaUpload: false, uploadedMedia: false, dots: '' }
   }
 
 
   renderPublish() {
 
-    const { isAdminUser, publish, onPublishChange } = this.props
+    const { isAdminUser, publish, changeState } = this.props
 
     if (isAdminUser) {
       return (
@@ -25,9 +27,9 @@ class ProductsForm extends Component {
             type="checkbox"
             name="published"
             checked={publish}
-            onChange={() => onPublishChange()}
+            onChange={() => changeState(!publish, 'publish')}
           />
-          <label htmlFor="publish-checkbox" className="post-form__label">Publish Product <span className="post-form__checkbox--span"></span></label>
+          <label htmlFor="publish-checkbox" className="post-form__label">Publish Post <span className="post-form__checkbox--span"></span></label>
         </div>
       )
     }
@@ -36,11 +38,10 @@ class ProductsForm extends Component {
 
   handleFileInputChange(event) {
 
-    const { onMainImageChange } = this.props
-    let imageChange = { target: { value: '' } }
+    const { changeState } = this.props
 
-    onMainImageChange(imageChange)
-    this.setState({ uploadedImage: true })
+    changeState('', 'mainMedia')
+    this.setState({ uploadedMedia: true })
 
     let formData = new FormData
 
@@ -48,22 +49,21 @@ class ProductsForm extends Component {
 
     axios.post('/api/upload', formData)
       .then(res => {
-        imageChange.target.value = res.data
-        onMainImageChange(imageChange)
+        changeState(res.data, 'mainMedia')
       }).catch(err => {
         console.error(err.response)
       })
   }
 
 
-  renderImageInput() {
+  renderMediaInput() {
 
-    const { mainImage, onMainImageChange } = this.props
+    const { mainMedia, changeState } = this.props
 
-    if (this.state.imageUpload) {
+    if (this.state.mediaUpload) {
       return (
         <div>
-          <p>Please wait to submit the form until you see the image you uploaded to ensure it uploads properly.</p>
+          <p>Please wait to submit the form until you see the media you uploaded to ensure it uploads properly.</p>
           <input
             className="post-form__input"
             type="file"
@@ -78,8 +78,8 @@ class ProductsForm extends Component {
           className="post-form__input"
           type="text"
           name="image"
-          value={mainImage}
-          onChange={event => onMainImageChange(event)}
+          value={mainMedia}
+          onChange={event => changeState(event.target.value, 'mainMedia')}
         />
       )
     }
@@ -88,9 +88,9 @@ class ProductsForm extends Component {
 
   renderDots() {
 
-    const { uploadedImage, dots } = this.state
+    const { uploadedMedia, dots } = this.state
 
-    if (uploadedImage && this.props.mainImage === '') {
+    if (uploadedMedia && this.props.mainMedia === '') {
       setTimeout(() => {
         switch (dots) {
           case ' .':
@@ -110,27 +110,41 @@ class ProductsForm extends Component {
   }
 
 
-  renderImage() {
+  renderMedia() {
 
-    const { mainImage } = this.props
+    const { mainMedia } = this.props
 
 
-    if (this.state.uploadedImage && mainImage === '') {
+    if (this.state.uploadedMedia && mainMedia === '') {
       return <h3 className="heading-tertiary">Loading{this.renderDots()}</h3>
     } else {
       return (
         <Media
           className="post-form__image"
-          src={mainImage}
+          src={mainMedia}
         />
       )
     }
   }
 
 
+  renderAdditionalFields() {
+
+    const { additionalFields, changeState } = this.props
+
+    if (additionalFields) {
+      return _.map(additionalFields, Field => {
+        return <Field key="" changeState={changeState} />
+      })
+    } else {
+      return null
+    }
+  }
+
+
   render() {
 
-    const { title, tags, price, quantity, description, onTitleChange, onQuantityChange, onPriceChange, onDescriptionChange, handleSubmit } = this.props
+    const { title, tags, content, changeState, handleSubmit } = this.props
 
     return (
       <form encType="multipart/form-data" className="post-form" onSubmit={handleSubmit.bind(this)}>
@@ -143,58 +157,33 @@ class ProductsForm extends Component {
               type="text"
               name="title"
               value={title}
-              onChange={event => onTitleChange(event)}
+              onChange={event => changeState(event.target.value, 'title')}
             />
           </div>
 
           <div className="post-form__field">
-            <label className="post-form__label">Tags</label>
+            <label className="post-form__label">
+              Tags
+            </label>
             <input
               className="post-form__input"
+              placeholder="separated by a comma"
               type="text"
               name="tags"
               value={tags}
-              onChange={event => onTagsChange(event)}
-            />
-          </div>
-        </div>
-
-        <div className='post-form__top'>
-          <div className="post-form__field">
-            <label className="post-form__label">Price</label>
-            <input
-              className="post-form__input"
-              type="number"
-              name="price"
-              step='.01'
-              min='0'
-              value={price}
-              onChange={event => onPriceChange(event)}
-            />
-          </div>
-
-          <div className="post-form__field">
-            <label className="post-form__label">Quantity</label>
-            <input
-              className="post-form__input"
-              type="number"
-              name="quantity"
-              step='1'
-              min='0'
-              value={quantity}
-              onChange={event => onQuantityChange(event)}
+              onChange={event => changeState(event.target.value, 'tags')}
             />
           </div>
         </div>
 
         <div className="post-form__label-section">
-          <label className="post-form__label">Image</label>
+          <label className="post-form__label">Media</label>
           <span>
             <input
               type="radio"
               name="image"
-              checked={this.state.imageUpload ? false : true}
-              onChange={() => this.setState({ imageUpload: false })}
+              checked={this.state.mediaUpload ? false : true}
+              onChange={() => this.setState({ mediaUpload: false })}
             />
             <label htmlFor="image-url">URL</label>
           </span>
@@ -202,21 +191,23 @@ class ProductsForm extends Component {
             <input
               type="radio"
               name="image"
-              checked={this.state.imageUpload ? true : false}
-              onChange={() => this.setState({ imageUpload: true })}
+              checked={this.state.mediaUpload ? true : false}
+              onChange={() => this.setState({ mediaUpload: true })}
             />
             <label htmlFor="image-upload">Upload</label>
           </span>
         </div>
 
-        {this.renderImageInput()}
-        {this.renderImage()}
+        {this.renderAdditionalFields()}
 
-        <label className="post-form__label">Description</label>
+        {this.renderMediaInput()}
+        {this.renderMedia()}
+
+        <label className="post-form__label">Content</label>
         <RichTextEditor
           className="post-form__text-editor"
-          content={description}
-          onChange={newDescription => onDescriptionChange(newDescription)}
+          content={content}
+          onChange={newContent => changeState(newContent, 'content')}
         />
 
         <div className="post-form__bottom">
@@ -230,4 +221,4 @@ class ProductsForm extends Component {
 }
 
 
-export default ProductsForm
+export default Form

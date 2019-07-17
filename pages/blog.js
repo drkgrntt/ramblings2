@@ -5,7 +5,7 @@ import Link from 'next/link'
 import _ from 'lodash'
 import keys from '../config/keys'
 import PostsFilter from '../components/PostsFilter'
-import SectionStandard from '../components/SectionStandard'
+import { SectionStandard } from '../components/Sections/'
 
 class BlogPage extends Component {
 
@@ -20,12 +20,10 @@ class BlogPage extends Component {
 
   renderAllBlogsLink() {
 
-    const { blogs } = this.props
-
-    if (blogs.length > 5) {
+    if (this.props.blogs.length > 5) {
       return (
         <Link href="/blog_all" as="/blog/all">
-          <a className="blog-page__button button button-secondary u-margin-bottom-small">See all blog posts</a>
+          <a className="blog-page__button button button-tertiary u-margin-bottom-small">See all blog posts</a>
         </Link>
       )
     }
@@ -37,16 +35,16 @@ class BlogPage extends Component {
     return (
       <div className="blog-page">
         <PostsFilter
-          component={SectionStandard}
           posts={this.props.blogs}
           settings={{
-            maxPosts: 5
+            maxPosts: "5"
           }}
+          component={SectionStandard}
           componentProps={{
-            contentLength: 200,
             mediaLeft: true,
             readMore: true,
-            path: 'blog'
+            path: 'blog',
+            emptyMessage: 'There are no blogs yet.'
           }}
         />
 

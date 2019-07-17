@@ -12,13 +12,9 @@ const userSchema = new mongoose.Schema({
   email: String,
   firstName: String,
   lastName: String,
-  isSubscribed: { type: Boolean, default: false },
 
   // Account creation date
   created: { type: Date, default: Date.now }
-},
-{
-  usePushEach: true
 })
 
 userSchema.plugin(passportLocalMongoose)

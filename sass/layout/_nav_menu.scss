@@ -1,5 +1,5 @@
 .nav-menu {
-  background-color: rgba($color-grey-light, .6);
+  background-color: $panel-color;
   padding: 0 2vw;
   
   display: flex;
@@ -66,7 +66,7 @@
     }
     
     &:hover:not(.nav-menu__item--hamburger) {
-      background-color: $color-grey-light-2;
+      background-color: rgba($color-grey-light-2, .6);
     }
 
     &--hamburger {

@@ -7,35 +7,42 @@ const passport = require('passport')
 const express = require('express')
 const next = require('next')
 const cors = require('cors')
+const _ = require('lodash')
+
+// App keys
 const keys = require('./config/keys')
 
 // Models
-const Settings = require('./models/settings')
 const User = require('./models/user')
 
-// Classes
-const ContactRoutes = require('./classes/contactRoutes')
-const PaymentRoutes = require('./classes/paymentRoutes')
-const AdminRoutes = require('./classes/adminRoutes')
-const AuthRoutes = require('./classes/authRoutes')
-const PostRoutes = require('./classes/postRoutes')
-const BlogRoutes = require('./classes/blogRoutes')
-const StoreRoutes = require('./classes/storeRoutes')
-
-// Server config
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
-const server = express()
+// Controllers
+const controllers = [
+  'adminRoutes',
+  'authRoutes',
+  'postRoutes',
+  'blogRoutes',
+  'commentRoutes',
+  // 'contactRoutes',
+  // 'paymentRoutes',
+  // 'storeRoutes',
+  // 'eventRoutes',
+]
+// Require controllers
+controllers.forEach((controller, index) => {
+  controllers[index] = require(`./controllers/${controller}`)
+})
 
 // Mongo config
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
 mongoose.set('useFindAndModify', false)
+mongoose.plugin(schema => { schema.options.usePushEach = true })
 mongoose.Promise = global.Promise
+
+const server = express()
 
 // CORS
 server.use(cors({
-  methods:['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }))
 
@@ -54,77 +61,84 @@ passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-// Configure app settings
-let appSettings
+// configure main app settings
+server.use(async (req, res, next) => {
 
-// Set user and settings to res.locals
-server.use((req, res, done) => {
+  // Instantiate res.locals.settings
+  if (!res.locals.settings) {
+    res.locals.settings = {}
+  }
 
-  // Search for a settings document
-  Settings.find().exec((error, settings) => {
+  next()
+})
 
-    if (error) {
-      console.error(error)
-    }
-
-    // We only EVER want ONE settings document
-    // If no document exists, create one and rerun function
-    if (settings.length === 0) {
-      appSettings = new Settings()
-      appSettings.save()
-      console.log('New settings document created')
-
-      // Give mongo time to save the document 
-      // before running the funciton again
-      // to prevent creating a duplicate settings document
-      setTimeout(() => { }, 3000)
-    } else {
-      appSettings = settings[0]
-    }
-
-    res.locals.settings = appSettings
-    res.locals.currentUser = req.user
-
-    done()
-  }) // End callback
-}) // End middleware
+// Server config
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
 
-  // Root Route
-  server.get('/', async (req, res) => {
-    res.redirect('/blog')
+  // Instantiate Controllers
+  controllers.forEach((Controller, index) => {
+    controllers[index] = new Controller(server, app)
   })
 
-  server.post('/api/googleAnalyticsId', (req, res) => {
-    if (keys.rootURL.includes(req.get('host'))) {
-      res.send(keys.googleAnalyticsId)
-    } else {
-      res.send('nunya beezwax')
-    }
+  // Register settings
+  controllers.forEach(controller => {
+    controller.registerSettings()
   })
 
-  // Register Routes
-  new AdminRoutes(server, app)
-  new AuthRoutes(server, app)
-  new PostRoutes(server, app)
-  // new ContactRoutes(server, app)
-  // new PaymentRoutes(server, app)
-  new BlogRoutes(server, app)
-  // new StoreRoutes( server, app )
+  // Register Utilitiy Routes
+  const UtilityRoutes = require('./utilities/routes')
+  new UtilityRoutes(server, app)
+
+  // Register Controller Routes
+  controllers.forEach(controller => {
+    controller.registerRoutes()
+  })
 
   // Anything without a specified route
   server.get('*', (req, res) => {
     return handle(req, res)
   })
 
-  server.listen(keys.port, (err) => {
+  server.listen(keys.port, err => {
     if (err) {
       throw err
     }
     console.log(`> Ready on ${keys.rootURL}`)
   })
-}).catch((ex) => {
+}).catch(ex => {
   console.error(ex.stack)
   process.exit(1)
 })
+
+const migrateBlogs = async () => {
+
+  const Post = require('./models/post')
+  const Blog = require('./models/blog')
+
+  const blogs = await Post.find({ type: 'blog' })
+
+  blogs.forEach(async blog => {
+    const newBlog = new Blog({
+      title: blog.title,
+      content: blog.content,
+      tags: blog.tags,
+      mainMedia: blog.mainMedia,
+      subImages: blog.subImages,
+      published: blog.published,
+      comments: blog.comments,
+      created: blog.created,
+      author: blog.author,
+      _id: blog._id
+    })
+
+    newBlog.save()
+
+    await Post.findByIdAndDelete(blog._id)
+  })
+}
+
+migrateBlogs()

@@ -1,10 +1,13 @@
 .posts-show-page {
   margin: 0 15vw;
   margin-bottom: 5rem;
-  background-color: rgba($color-grey-light, .7);
+  background-color: $panel-color;
   border-radius: .8rem;
   min-height: calc(100vh - 35rem);
   padding-bottom: 2rem;
+
+  display: flex;
+  flex-direction: column;
 
   @include respond(tab-land) {
     margin: 0 12rem;
@@ -13,6 +16,11 @@
 
   @include respond(tab-port) {
     margin: 0 6rem;
+    margin-bottom: 5rem;
+  }
+
+  @include respond(phone) {
+    margin: 0 2rem;
     margin-bottom: 5rem;
   }
 }
@@ -69,9 +77,12 @@
   }
 
   &__content {
-    white-space: pre-wrap;
     padding-top: 1rem;
     letter-spacing: .1rem;
+
+    p {
+      margin-bottom: 2rem;
+    }
   }
 
   &__buttons {

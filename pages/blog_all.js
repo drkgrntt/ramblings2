@@ -1,60 +1,52 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import keys from '../config/keys'
 import PostsFilter from '../components/PostsFilter'
-import SectionCards from '../components/SectionCards'
+import { SectionCards } from '../components/Sections/'
 
-class BlogAllPage extends Component {
+const BlogAllPage = props => (
+  <PostsFilter
+    component={SectionCards}
+    posts={props.blogs}
+    settings={{
+      maxPosts: "9999"
+    }}
+    componentProps={{
+      title: 'All Blog Posts',
+      perRow: 3,
+      readMore: true,
+      path: 'blog',
+      contentLength: 100,
+      emptyMessage: 'No blog posts found.'
+    }}
+  />
+)
 
-  static async getInitialProps({ req, query, reduxStore }) {
 
-    let currentUser
-    let axiosConfig = {}
+BlogAllPage.getInitialProps = async ({ req, query, reduxStore }) => {
 
-    // Depending on if we are doing a client or server render
-    if (!!req) {
-      currentUser = query.currentUser
-      axiosConfig = {
-        withCredentials: true,
-        headers: {
-          Cookie: req.headers.cookie
-        }
+  let currentUser
+  let axiosConfig = {}
+
+  // Depending on if we are doing a client or server render
+  if (!!req) {
+    currentUser = query.currentUser
+    axiosConfig = {
+      withCredentials: true,
+      headers: {
+        Cookie: req.headers.cookie
       }
-    } else {
-      currentUser = reduxStore.getState().currentUser
     }
-
-    const rootUrl = keys.rootURL ? keys.rootURL : ''
-    const blogRequest = currentUser && currentUser.isAdmin ? 'blogs' : 'published_blogs'
-    const blogs = await axios.get(`${rootUrl}/api/${blogRequest}`, axiosConfig)
-
-    return { blogs: blogs.data }
+  } else {
+    currentUser = reduxStore.getState().currentUser
   }
 
+  const rootUrl = keys.rootURL ? keys.rootURL : ''
+  const blogRequest = currentUser && currentUser.isAdmin ? 'blogs' : 'published_blogs'
+  const blogs = await axios.get(`${rootUrl}/api/${blogRequest}`, axiosConfig)
 
-  render() {
-
-    return (
-      <div className="blog-page">
-        <PostsFilter
-          component={SectionCards}
-          posts={this.props.blogs}
-          settings={{
-            // postTags: "blog",
-            maxPosts: "9999"
-          }}
-          componentProps={{
-            title: 'Blog Posts',
-            perRow: 3,
-            readMore: true,
-            path: 'blog',
-            contentLength: 100
-          }}
-        />
-      </div>
-    )
-  }
+  return { blogs: blogs.data }
 }
 
 

@@ -3,10 +3,9 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
-import keys from '../config/keys'
-import { setCurrentUser, setBlogs } from '../store'
+import { setCurrentUser } from '../store'
 
-class Profile extends Component {
+class ProfilePage extends Component {
 
   constructor(props) {
 
@@ -39,15 +38,10 @@ class Profile extends Component {
   onLogoutClick() {
 
     axios.get('/api/logout')
-      .then(async res => {
+      .then(res => {
         if (res.data === 'logged out') {
-          
-          const rootUrl = keys.rootURL ? keys.rootURL : ''
-          const blogs = await axios.get(`${rootUrl}/api/published_blogs`)
-          this.props.setBlogs(blogs);
+          Router.push('/')
           this.props.setCurrentUser(null)
-
-          Router.push('/blog')
         }
       }).catch(err => {
         console.error(err)
@@ -214,7 +208,7 @@ class Profile extends Component {
       ) // End profile
 
     } else { // If not logged in
-      return null
+      return <h3 className="profile-page__not-logged-in">You need to be logged in to view this page.</h3>
     }
   }
 
@@ -235,4 +229,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps, { setBlogs, setCurrentUser })(Profile)
+export default connect(mapStateToProps, { setCurrentUser })(ProfilePage)

@@ -55,7 +55,7 @@ class PostsAll extends Component {
         })
 
         // If we are searching for the tag and we haven't already included the post, include it
-        if (tag.toLowerCase().includes(event.target.value.toLowerCase()) && !isFound) {
+        if (tag.includes(event.target.value) && !isFound) {
           foundPosts.push(post)
         }
       })

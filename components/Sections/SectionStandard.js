@@ -1,16 +1,30 @@
+/**
+ * SectionStandard will render Posts in a more horizontal style
+ * 
+ * props include:
+ *   title: String - The title to display above the cards
+ *   readMore: Boolean - If true, a link to the full post will render at the bottom of each card
+ *   path: String - The path to use for the read more link before the post id ('/{path}/a1s2d3f4g5h6j7')
+ *   contentLength: String - How many characters to show in the card content
+ *   emptyMessage: String - Message to display if there are no posts
+ *   posts: Array [Object - The post to be rendered as a card]
+ */
+
+
 import React, { Component } from 'react'
 import _ from 'lodash'
 import renderHTML from 'react-render-html'
 import Link from 'next/link'
-import Media from './Media'
+import Media from '../Media'
+
 
 class SectionStandard extends Component {
 
-  renderMedia(mediaSource) {
+  renderMedia(post) {
 
     return (
       <div className="section-standard__image">
-        <Media src={mediaSource} />
+        <Media src={post.mainMedia} alt={post.title} />
       </div>
     )
   }
@@ -21,13 +35,13 @@ class SectionStandard extends Component {
     const { mediaLeft, mediaRight } = this.props
 
     if (mediaRight && !mediaLeft) {
-      return this.renderMedia(post.mainMedia)
+      return this.renderMedia(post)
     } else if (
       ((!mediaRight && !mediaLeft) ||
         (mediaRight && mediaLeft)) &&
       i % 2 !== 0 && !!post.mainMedia
     ) {
-      return this.renderMedia(post.mainMedia)
+      return this.renderMedia(post)
     }
   }
 
@@ -37,13 +51,13 @@ class SectionStandard extends Component {
     const { mediaLeft, mediaRight } = this.props
 
     if (mediaLeft && !mediaRight) {
-      return this.renderMedia(post.mainMedia)
+      return this.renderMedia(post)
     } else if (
       ((!mediaRight && !mediaLeft) ||
         (mediaRight && mediaLeft)) &&
       i % 2 === 0 && !!post.mainMedia
     ) {
-      return this.renderMedia(post.mainMedia)
+      return this.renderMedia(post)
     }
   }
 
@@ -60,7 +74,7 @@ class SectionStandard extends Component {
         <div>
           {renderHTML(postContent)}
           <Link href={`/${path}_show?id=${post._id}`} as={`/${path}/${post._id}`}>
-            <a>Read More</a>
+            <a className="section-standard__link">Read More</a>
           </Link>
         </div>
       )
@@ -72,14 +86,15 @@ class SectionStandard extends Component {
 
   renderPosts() {
 
-    const { path, posts } = this.props
+    const { emptyMessage, posts } = this.props
 
     if (posts.length !== 0) {
       return _.map(posts, (post, i) => {
         const postTextClassName = !!post.mainMedia ? 'section-standard__text' : 'section-standard__text--wide'
+        const withMedia = post.mainMedia ? "--with-media" : ''
 
         return (
-          <div className="section-standard__post" key={post._id}>
+          <div className={`section-standard__post${withMedia}`} key={post._id}>
             {this.renderLeftMedia(post, i)}
             <div className={postTextClassName}>
               <h3 className="heading-tertiary">{post.title}</h3>
@@ -90,19 +105,30 @@ class SectionStandard extends Component {
         )
       })
     } else {
-      return <h3 className="heading-tertiary">There are no {path}s yet.</h3>
+      return <h3 className="heading-tertiary">{emptyMessage ? emptyMessage : ''}</h3>
+    }
+  }
+
+
+  renderTitle() {
+
+    const { title } = this.props
+
+    if (title) {
+      return <h2 className="heading-secondary u-margin-bottom-medium">{title}</h2>
+    } else {
+      return null
     }
   }
 
 
   render() {
 
-    const { className, title } = this.props
+    const { className } = this.props
 
     return (
-      <div className={`${className} section-standard`}>
-        <h2 className="heading-secondary u-margin-bottom-medium">{title}</h2>
-
+      <div className={`${className ? className : ''} section-standard`}>
+        {this.renderTitle()}
         {this.renderPosts()}
       </div>
     )

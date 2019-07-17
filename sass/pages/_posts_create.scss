@@ -1,5 +1,5 @@
 .posts-create-page {
-  background-color: rgba($color-grey-light, .8);
+  background-color: $panel-color;
   margin: 0 20rem;
   margin-bottom: 5rem;
   padding: 1rem 3rem;
@@ -11,12 +11,14 @@
   }
 
   @include respond(tab-port) {
-    padding: 4rem 12vw;
+    padding: 4rem 10vw;
     margin: 0 6rem;
     margin-bottom: 5rem;
   }
 
   @include respond(phone) {
-    padding: 3rem 7vw;
+    padding: 2rem 2vw;
+    margin: 0 2rem;
+    margin-bottom: 5rem;
   }
 }

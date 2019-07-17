@@ -10,14 +10,15 @@ $color-grey-dark: #333;
 $color-black: #000;
 
 // palette
-$color-primary: rgb(50, 150, 50);	// Main Primary color
+$color-primary: rgb(0, 200, 0);	// Main Primary color
 
-$color-secondary: rgb(50, 50, 150);	// Main Secondary color
+$color-secondary: rgb(200, 0, 0);	// Main Secondary color
 
-$color-tertiary: rgb(150, 50, 50);	// Main tertiary color
+$color-tertiary: rgb(0, 0, 200);	// Main tertiary color
 
 // FONT
 $default-font-size: 1.6rem;
 
 // COMMON STYLES
 $shadow: 0 1rem 3rem rgba($color-black, .3);
+$panel-color: rgba($color-grey-light, .4);

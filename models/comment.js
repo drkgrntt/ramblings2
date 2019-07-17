@@ -10,16 +10,8 @@ const commentSchema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user' 
-  },
-  post: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'post'
+    ref: 'user'
   }
-},
-{
-  usePushEach: true,
-  strict: false
 })
 
 module.exports = mongoose.model('comment', commentSchema)

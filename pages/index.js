@@ -22,8 +22,6 @@ class Landing extends Component {
 
   render() {
 
-    const { posts } = this.props
-
     return (
       <div className="landing">
         <BlogPage />
