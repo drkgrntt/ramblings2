@@ -15,6 +15,7 @@ class UtilityRoutes {
   registerRoutes() {
 
     this.server.get('/', this.renderLanding.bind(this))
+    this.server.get('/blogs', this.renderLanding.bind(this))
     this.server.post('/api/googleAnalyticsId', this.sendGoogleAnalyticsId)
     this.server.post('/api/googleMapsKey', this.sendGoogleMapsKey)
   }
