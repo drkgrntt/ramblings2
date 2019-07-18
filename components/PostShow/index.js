@@ -14,6 +14,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import _ from 'lodash'
 import Link from 'next/link'
+import Head from 'next/head'
 import Router from 'next/router'
 import renderHTML from 'react-render-html'
 import Comment from './Comment'
@@ -95,6 +96,14 @@ class PostShow extends Component {
 
     return (
       <div className={`posts-show-page`}>
+
+        <Head>
+          <meta property="og:image" content={mainMedia || ''} />
+          <meta property="og:image:type" content="image/jpeg" />
+          <meta property="og:image:width" content="200" />
+          <meta property="og:image:height" content="200" />
+        </Head>
+
         <div className="post">
           <h2 className="heading-secondary post__title u-margin-bottom-small">{title}</h2>
           {this.renderTagsSection(tags)}
