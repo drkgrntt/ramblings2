@@ -44,7 +44,7 @@ class PostsFilter extends Component {
 
               included = true
             }
-            
+
             if (strictTags && !post.tags.includes(tag)) {
               included = false
             }
@@ -75,6 +75,15 @@ class PostsFilter extends Component {
 
 
   render() {
+
+    if (this.props.singular) {
+      return (
+        <this.props.component
+          post={this.state.posts[0]}
+          {...this.props.componentProps}
+        />
+      )
+    }
 
     return (
       <this.props.component

@@ -7,7 +7,7 @@ import keys from '../config/keys'
 
 const PostsEdit = props => (
   <PostsForm
-    pageTitle="Edit Post"
+    pageTitle="Edit Content"
     post={props.post}
     apiEndpoint={`/api/posts/${props.post._id}`}
     editing

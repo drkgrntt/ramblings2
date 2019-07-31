@@ -120,7 +120,7 @@ class PostsForm extends Component {
 
     return (
       <div className="posts-create-page">
-        <h2 className="heading-secondary">{pageTitle ? pageTitle : 'New Post'}</h2>
+        <h2 className="heading-secondary">{pageTitle ? pageTitle : 'New Content'}</h2>
         <Form
           changeState={this.changeState.bind(this)}
           isAdminUser={this.props.currentUser.isAdmin}

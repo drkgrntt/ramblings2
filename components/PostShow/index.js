@@ -103,6 +103,8 @@ class PostShow extends Component {
           <meta property="og:image:width" content="200" />
           <meta property="og:image:height" content="200" />
           <title>{`Ramblings | ${title}`}</title>
+          <meta name="title" content={title} />
+          <meta name="keywords" content={tags} />
         </Head>
 
         <div className="post">
