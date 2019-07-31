@@ -40,7 +40,7 @@ class ProfilePage extends Component {
     axios.get('/api/logout')
       .then(res => {
         if (res.data === 'logged out') {
-          Router.push('/')
+          Router.push('/blog')
           this.props.setCurrentUser(null)
         }
       }).catch(err => {
