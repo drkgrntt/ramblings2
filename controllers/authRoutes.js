@@ -14,7 +14,7 @@ class AuthRoutes extends Controller {
     // Middleware to configure auth settings
     this.server.use(async (req, res, next) => {
 
-      const defaultSettings = { enableRegistration: true }
+      const defaultSettings = { enableWelcomeEmailing: false, enableRegistration: true }
       const settings = await configureSettings('auth', defaultSettings)
 
       _.map(settings, (optionValue, optionKey) => {
@@ -63,6 +63,14 @@ class AuthRoutes extends Controller {
       sanitizeRequestBody, 
       this.changeUserPassword.bind(this)
     )
+    this.server.post(
+      '/api/subscribe',
+      this.subscribe.bind(this)
+    )
+    this.server.post(
+      '/api/unsubscribe',
+      this.unsubscribe.bind(this)
+    )
     this.server.get(
       '/api/logout', 
       this.logoutUser.bind(this)
@@ -77,6 +85,24 @@ class AuthRoutes extends Controller {
     } else {
       res.status(400).send({ message: 'You\'re not allowed to do that.' })
     }
+  }
+
+
+  async subscribe(req, res) {
+
+    const updatedUser = await UserModel.findOneAndUpdate({ _id: req.user._id }, { isSubscribed: true })
+    updatedUser.isSubscribed = true
+
+    res.send(updatedUser)
+  }
+
+
+  async unsubscribe(req, res) {
+
+    const updatedUser = await UserModel.findOneAndUpdate({ _id: req.user._id }, { isSubscribed: false })
+    updatedUser.isSubscribed = false
+    
+    res.send(updatedUser)
   }
 
 
@@ -128,11 +154,11 @@ class AuthRoutes extends Controller {
 
       passport.authenticate('local')(req, res, () => {
 
-        const mailer = new Mailer()
-        const templatePath = 'emails/welcome.html'
-        const subject = `Welcome, ${newUser.firstName}!`
+        if (res.locals.settings.enableWelcomeEmailing) {
+          const mailer = new Mailer()
+          const templatePath = 'emails/welcome.html'
+          const subject = `Welcome, ${newUser.firstName}!`
 
-        if (res.locals.settings.enableEmailing) {
           mailer.sendEmail(newUser, templatePath, newUser.email, subject)
         }
 

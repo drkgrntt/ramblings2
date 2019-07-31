@@ -4,6 +4,7 @@ import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
 import { setCurrentUser } from '../store'
+import Subscribe from '../components/Subscribe'
 
 class ProfilePage extends Component {
 
@@ -133,6 +134,8 @@ class ProfilePage extends Component {
             </div>
             {this.renderAdmin()}
           </div>
+
+          <Subscribe />
 
           <div className="profile__info">
             <p>Email: {currentUser.email}</p>

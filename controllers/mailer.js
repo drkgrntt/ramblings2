@@ -5,7 +5,10 @@ var handlebars = require('handlebars')
 var fs = require('fs')
 const keys = require('../config/keys')
 
-
+/**
+ * Connect a gmail account using:
+ * https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1
+ */
 class Mailer {
 
   constructor() {

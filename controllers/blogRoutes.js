@@ -1,7 +1,12 @@
+const _ = require("lodash")
 const Controller = require('./abstractController')
+const Mailer = require('./mailer')
 const BlogModel = require('../models/blog')
+const UserModel = require('../models/user')
 const CommentModel = require('../models/comment')
+const { configureSettings } = require('../utilities/functions')
 const { checkIfAdmin, sanitizeRequestBody } = require('../utilities/middleware')
+const keys = require('../config/keys')
 
 class BlogRoutes extends Controller {
 
@@ -71,6 +76,22 @@ class BlogRoutes extends Controller {
   }
 
 
+  registerSettings() {
+
+    // Middleware to configure auth settings
+    this.server.use(async (req, res, next) => {
+
+      const defaultSettings = { enableSubscriberEmailing: false }
+      const settings = await configureSettings('blog', defaultSettings)
+
+      _.map(settings, (optionValue, optionKey) => {
+        res.locals.settings[optionKey] = optionValue
+      })
+      next()
+    })
+  }
+
+
   allowUserComments(req, res, next) {
 
     const { settings } = res.locals
@@ -102,13 +123,39 @@ class BlogRoutes extends Controller {
   }
 
 
-  createBlog(req, res) {
+  async createBlog(req, res) {
 
     const blog = new BlogModel(req.body)
     blog.author = req.user
 
     blog.save()
+
+    if (blog.published) {
+      await this.emailSubscribers(res, blog.title, blog._id)
+    }
+
     res.send(blog)
+  }
+
+
+  async emailSubscribers(res, blogTitle, blogId) {
+
+    if (res.locals.settings.enableSubscriberEmailing) {
+
+      const subscribedUsers = await UserModel.find({ isSubscribed: true })
+      const mailer = new Mailer()
+      const templatePath = 'emails/newBlog.html'
+      const subject = `New Blog Post - ${blogTitle}`
+      
+      _.map(subscribedUsers, user => {
+        
+        const model = {
+          firstName: user.firstName,
+          blogLink: `${keys.rootURL}/blog/${blogId}`
+        }
+        mailer.sendEmail(model, templatePath, user.email, subject)
+      })
+    }
   }
 
 
@@ -142,6 +189,13 @@ class BlogRoutes extends Controller {
   async updateBlog(req, res) {
 
     const updatedBlog = await BlogModel.findOneAndUpdate({ _id: req.params.id }, req.body)
+
+    if (
+      !updatedBlog.published && 
+      req.body.published
+    ) {
+      await this.emailSubscribers(res, req.body.title, req.params.id)
+    }
 
     res.send(updatedBlog)
   }

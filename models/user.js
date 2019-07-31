@@ -14,7 +14,10 @@ const userSchema = new mongoose.Schema({
   lastName: String,
 
   // Account creation date
-  created: { type: Date, default: Date.now }
+  created: { type: Date, default: Date.now },
+
+  // Extra
+  isSubscribed: { type: Boolean, default: false }
 })
 
 userSchema.plugin(passportLocalMongoose)
